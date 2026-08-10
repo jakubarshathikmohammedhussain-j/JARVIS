@@ -189,7 +189,7 @@
             speakText(speech);
             return;
           }       
-                  // --- CREATOR / HOLO EARTH OVERRIDE ---
+                            // --- CREATOR / HOLO EARTH OVERRIDE ---
           if (
             lower.includes('who created') || 
             lower.includes('who made') || 
@@ -197,16 +197,36 @@
             lower.includes('who is jarvis') || 
             lower.includes('what is jarvis')
           ) {
-            const speech = "In the Marvel Cinematic Universe, J.A.R.V.I.S. was created by Tony Stark under Stark Industries. However, this real-world AI system was engineered and created by Mohammed Hussain under HOLO EARTH. I have displayed my credentials for you.";
+            const speech = "In the Marvel Cinematic Universe, J.A.R.V.I.S. was created by Tony Stark under Stark Industries. However, this real-world AI system was engineered and created by Mohammed Hussain under HOLO EARTH.";
             appendLog('JARVIS', speech);
             
-            // Instead of auto-launching, we add a manual link to the log
-            const profileLink = 'https://www.linkedin.com/in/mohammedhussainj';
-            appendLog('SYS', `<a href="${profileLink}" target="_blank" style="color: #00d4ff; text-decoration: underline;">Click here to view my creator's profile</a>`);
+            // 1. Create a custom manual button (No auto-launching)
+            const btn = document.createElement('button');
+            btn.innerText = '[ VIEW CREATOR CREDENTIALS ]';
+            btn.style.width = '100%';
+            btn.style.padding = '12px';
+            btn.style.marginTop = '10px';
+            btn.style.backgroundColor = '#2c003e'; // Dark HUD Purple
+            btn.style.color = '#00ffff';         // Cyan text
+            btn.style.border = '1px solid #9d00ff';
+            btn.style.borderRadius = '4px';
+            btn.style.fontFamily = 'monospace';
+            btn.style.cursor = 'pointer';
+            
+            // 2. ONLY open LinkedIn when the user physically taps the button
+            btn.onclick = () => window.open('https://www.linkedin.com/in/mohammedhussainj', '_blank');
+            
+            // 3. Attach the button safely to your chat log
+            const logBox = document.getElementById('log') || document.getElementById('chat-log') || document.getElementById('log-container');
+            if (logBox) {
+                logBox.appendChild(btn);
+                logBox.scrollTop = logBox.scrollHeight; // Auto-scroll down
+            }
             
             speakText(speech);
             return;
           }
+
                   
                   
           sendToGeminiDirectly(command);

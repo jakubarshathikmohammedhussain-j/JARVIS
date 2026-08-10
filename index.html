@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>J.A.R.V.I.S. System HUD</title>
   <style>
-    /* 4. THE INTERACTIVE HUD UI: Color Palette */
     :root {
       --bg-color: #050b14;
       --primary-blue: #00d8ff;       /* Idle */
@@ -18,7 +17,7 @@
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Courier New', Courier, monospace; }
     body { background-color: var(--bg-color); color: var(--text-color); height: 100vh; overflow: hidden; display: flex; flex-direction: column; }
     
-    /* Secure API Storage Screen */
+    /* Startup Screen */
     #startup-screen {
       position: absolute; top: 0; left: 0; width: 100vw; height: 100vh;
       background: var(--bg-color); z-index: 9999;
@@ -34,12 +33,12 @@
     .startup-box button { width: 100%; padding: 12px; background: var(--primary-blue); color: #000; font-weight: bold; border: none; cursor: pointer; font-size: 16px; transition: 0.3s; }
     .startup-box button:active { transform: scale(0.98); }
 
-    /* Main HUD Layout */
+    /* Main HUD */
     #main-app { display: none; flex-direction: column; height: 100vh; padding: 15px; }
     .hud-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--primary-blue); padding-bottom: 10px; font-size: 12px; flex-shrink: 0; }
     .badge { padding: 4px 8px; border-radius: 4px; border: 1px solid var(--primary-blue); color: var(--primary-blue); font-weight: bold; }
     
-    /* Animated Arc Reactor */
+    /* Arc Reactor */
     .arc-container { display: flex; justify-content: center; align-items: center; flex-grow: 1; min-height: 150px; }
     .arc-reactor { width: 120px; height: 120px; border-radius: 50%; position: relative; display: flex; justify-content: center; align-items: center; transition: all 0.5s ease; }
     .core { width: 40px; height: 40px; border-radius: 50%; background: white; box-shadow: 0 0 20px var(--primary-blue); transition: all 0.5s ease; }
@@ -49,43 +48,33 @@
     @keyframes spin { 100% { transform: rotate(360deg); } }
     @keyframes spin-reverse { 100% { transform: rotate(-360deg); } }
     
-    /* Dynamic Arc States */
+    /* States */
     .state-idle { box-shadow: 0 0 30px var(--primary-blue); }
     .state-idle .ring-1, .state-idle .ring-2 { border-color: var(--primary-blue); }
-    
     .state-listening { box-shadow: 0 0 30px var(--listening-green); }
     .state-listening .core { box-shadow: 0 0 20px var(--listening-green); }
     .state-listening .ring-1, .state-listening .ring-2 { border-color: var(--listening-green); }
-    
     .state-processing { box-shadow: 0 0 30px var(--processing-yellow); }
     .state-processing .core { box-shadow: 0 0 20px var(--processing-yellow); }
     .state-processing .ring-1, .state-processing .ring-2 { border-color: var(--processing-yellow); }
-    
     .state-speaking { box-shadow: 0 0 30px var(--speaking-purple); }
     .state-speaking .core { box-shadow: 0 0 20px var(--speaking-purple); }
     .state-speaking .ring-1, .state-speaking .ring-2 { border-color: var(--speaking-purple); }
     
-    /* Controls & Live Terminal */
     .glow-btn { background: rgba(0, 216, 255, 0.1); border: 1px solid var(--primary-blue); color: var(--primary-blue); padding: 15px; font-weight: bold; cursor: pointer; width: 100%; margin-bottom: 15px; border-radius: 4px; flex-shrink: 0; }
-    
     .terminal-box { background: var(--panel-bg); border: 1px solid var(--primary-blue); border-radius: 6px; display: flex; flex-direction: column; height: 45vh; flex-shrink: 0; }
-    .terminal-header { font-size: 11px; color: var(--primary-blue); padding: 8px 10px; border-bottom: 1px solid rgba(0, 216, 255, 0.3); background: rgba(0, 0, 0, 0.5); }
-    
+    .terminal-header { font-size: 11px; color: var(--primary-blue); padding: 8px 10px; border-bottom: 1px solid rgba(0, 216, 255, 0.3); background: rgba(0, 0, 0, 0.5); display: flex; justify-content: space-between; }
     .log-content { flex-grow: 1; overflow-y: auto; padding: 10px; font-size: 12px; display: flex; flex-direction: column; gap: 8px; }
     .log-content::-webkit-scrollbar { width: 4px; }
     .log-content::-webkit-scrollbar-thumb { background: var(--primary-blue); border-radius: 4px; }
-    
     .user-msg { color: var(--listening-green); padding-left: 10px; border-left: 2px solid var(--listening-green); }
     .jarvis-msg { color: var(--text-color); padding-left: 10px; border-left: 2px solid var(--speaking-purple); }
     .sys-msg { color: #888; font-style: italic; font-size: 11px; }
-    
-    /* Pop-Up Fallback Button */
     .action-launch-btn { display: inline-block; margin-top: 5px; padding: 10px; background: rgba(157, 0, 255, 0.2); border: 1px solid var(--speaking-purple); color: #fff; text-decoration: none; font-weight: bold; border-radius: 4px; font-size: 11px; text-align: center; }
   </style>
 </head>
 <body>
 
-  <!-- AUTH SCREEN -->
   <div id="startup-screen">
     <div class="startup-box">
       <h1>J.A.R.V.I.S. OS</h1>
@@ -94,10 +83,10 @@
     </div>
   </div>
 
-  <!-- MAIN HUD -->
   <div id="main-app">
     <header class="hud-header">
       <div class="system-status">STARK INDUSTRIES // UPLINK SECURE</div>
+      <button id="reset-key-btn" style="background: transparent; border: 1px solid var(--processing-yellow); color: var(--processing-yellow); font-size: 10px; padding: 2px 6px; cursor: pointer; border-radius: 3px;">RESET KEY</button>
       <div id="status-badge" class="badge">IDLE</div>
     </header>
 
@@ -112,7 +101,7 @@
     <button id="init-btn" class="glow-btn">INITIALIZE AUDIO MATRIX</button>
 
     <section class="terminal-box">
-      <div class="terminal-header">COMMUNICATION LOG</div>
+      <div class="terminal-header"><span>COMMUNICATION LOG</span></div>
       <div id="log-content" class="log-content"></div>
     </section>
   </div>
@@ -132,21 +121,23 @@
     const arcReactor = document.getElementById('arc-reactor');
     const initBtn = document.getElementById('init-btn');
 
-    // --- SECURE API STORAGE ---
     function bootSystem() {
       startupScreen.style.display = 'none';
       mainApp.style.display = 'flex';
       appendLog('SYS', 'System Booted. Ready for audio initialization.');
     }
+    
+    const resetBtn = document.getElementById('reset-key-btn');
+    if(resetBtn) {
+      resetBtn.onclick = () => { localStorage.removeItem('jarvis_api_key'); location.reload(); };
+    }
+
     if (apiKey) bootSystem();
     document.getElementById('boot-btn').addEventListener('click', () => {
       const key = document.getElementById('startup-api-key').value.trim();
       if (key) { localStorage.setItem('jarvis_api_key', key); apiKey = key; bootSystem(); }
     });
 
-    // --- 1. THE ALWAYS-ON VOICE ENGINE ---
-    
-    // Auto-Voice Selection (UK Male)
     function loadVoices() {
       const voices = window.speechSynthesis.getVoices();
       selectedVoice = voices.find(v => (v.lang.includes('en-GB') || v.lang.includes('en_GB')) && (v.name.includes('Male') || v.name.includes('Daniel'))) || voices[0];
@@ -164,13 +155,10 @@
       recognition.onstart = () => { if (!isJarvisSpeaking) updateState('listening'); };
 
       recognition.onresult = (event) => {
-        // Anti-Feedback Guard: Ignore if speaking
         if (isJarvisSpeaking) return;
-        
         const transcript = event.results[event.results.length - 1][0].transcript.trim();
         const lower = transcript.toLowerCase();
         
-        // Wake Word & Continuous Conversation Mode
         if (lower.includes('jarvis') || isSessionActive) {
           let command = transcript.replace(/jarvis/gi, '').trim() || 'Awaiting directive.';
           appendLog('YOU', transcript);
@@ -179,11 +167,23 @@
         }
       };
 
-      recognition.onerror = (e) => { if(e.error !== 'no-speech') appendLog('SYS', 'Mic Error: ' + e.error); };
-      recognition.onend = () => { if (!isJarvisSpeaking) setTimeout(() => { try { recognition.start(); } catch(e){} }, 300); };
+      recognition.onerror = (e) => { 
+        if (e.error === 'not-allowed') {
+          appendLog('SYS', 'Mic access revoked by background tab. Tap INITIALIZE to reconnect.');
+          initBtn.style.display = 'block'; 
+          updateState('idle');
+        } else if (e.error !== 'no-speech' && e.error !== 'aborted') {
+          appendLog('SYS', 'Mic Error: ' + e.error); 
+        }
+      };
+      
+      recognition.onend = () => { 
+        if (!isJarvisSpeaking && initBtn.style.display === 'none') {
+          setTimeout(() => { try { recognition.start(); } catch(e){} }, 300); 
+        }
+      };
     }
 
-    // 15-Second Continuous Conversation Timer
     function activateSession() {
       isSessionActive = true;
       clearTimeout(sessionTimeoutTimer);
@@ -194,15 +194,13 @@
       }, 15000);
     }
 
-    // --- 2. THE AI BRAIN (GEMINI 3.5 FLASH) ---
     async function sendToGeminiDirectly(message) {
       updateState('processing');
-      // Using EXACTLY the model requested
       const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash-lite:generateContent?key=${apiKey}`;
       
       const payload = {
         systemInstruction: {
-          parts: [{ text: "You are J.A.R.V.I.S., an advanced AI assistant. Address the user as 'Sir' or 'Boss'. Provide detailed, intelligent answers. Never use markdown, emojis, or bullet points. CRITICAL: Return ONLY a raw JSON object with two properties: 'speech' (the exact words you say) and 'actionUrl' (a full HTTPS URL if the user asks to open an app or search, otherwise null). Do not wrap the JSON in markdown blocks." }]
+          parts: [{ text: "You are J.A.R.V.I.S., an advanced AI assistant. Address the user as 'Sir' or 'Boss'. Provide detailed, intelligent answers. Never use markdown, emojis, or bullet points. CRITICAL: Return ONLY a raw JSON object with two properties: 'speech' (the exact words you say) and 'actionUrl' (a full HTTPS URL ONLY if the user explicitly asks to open an app, website, or search, otherwise set to null). Do not wrap the JSON in markdown blocks." }]
         },
         contents: [{ parts: [{ text: message }] }]
       };
@@ -217,15 +215,16 @@
         const data = await response.json();
         if (data.error) throw new Error(data.error.message);
 
-        // Clean output to ensure TTS works flawlessly
         const rawText = data.candidates[0].content.parts[0].text;
         const cleanJson = rawText.replace(/^```json\s*/, '').replace(/\s*```$/, '').trim();
         const parsedData = JSON.parse(cleanJson);
 
         appendLog('JARVIS', parsedData.speech);
         
-        // --- 3. ACTION AND APP LAUNCHING ---
-        if (parsedData.actionUrl) handleAppLaunch(parsedData.actionUrl);
+        // Execute tab open ONLY when actionUrl is non-null
+        if (parsedData.actionUrl) {
+          handleAppLaunch(parsedData.actionUrl);
+        }
         
         speakText(parsedData.speech);
 
@@ -236,40 +235,41 @@
       }
     }
 
-    // Mobile Deep-Linking & Pop-Up Fallback
     function handleAppLaunch(url) {
-      // 1. Try automatic deep link
-      try { window.open(url, '_blank'); } catch(e) {}
-      
-      // 2. Generate Pop-up fallback button
+      // 1. Attempt automatic open
+      try {
+        window.open(url, '_blank');
+      } catch (e) {
+        console.log('Auto-open intercepted by browser popup blocker');
+      }
+
+      // 2. Fallback button in case mobile popup blocker intercepts
       const a = document.createElement('a');
       a.href = url; a.target = '_blank'; a.className = 'action-launch-btn'; a.innerText = '[ TAP TO OPEN LINK / APP ]';
       logContent.appendChild(a);
       logContent.scrollTop = logContent.scrollHeight;
     }
 
-    // Anti-Feedback Guard Audio Controller
     function speakText(text) {
       if (!text) return;
       window.speechSynthesis.cancel();
       const utterance = new SpeechSynthesisUtterance(text);
       if (selectedVoice) utterance.voice = selectedVoice;
       
-      // Cut off mic before speaking
       isJarvisSpeaking = true;
       updateState('speaking');
       try { recognition.abort(); } catch(e){}
 
       utterance.onend = utterance.onerror = () => {
-        // Re-enable mic after speaking
         isJarvisSpeaking = false;
         updateState(isSessionActive ? 'listening' : 'idle');
-        setTimeout(() => { try { recognition.start(); } catch(e){} }, 500);
+        if (initBtn.style.display === 'none') {
+          setTimeout(() => { try { recognition.start(); } catch(e){} }, 500);
+        }
       };
       window.speechSynthesis.speak(utterance);
     }
 
-    // --- 4. THE INTERACTIVE HUD UI ---
     function updateState(state) {
       statusBadge.innerText = state.toUpperCase();
       arcReactor.className = `arc-reactor state-${state}`;

@@ -163,7 +163,7 @@
           appendLog('YOU', transcript);
           activateSession();
 
-                    // --- PORTFOLIO DIRECT OVERRIDE ---
+                              // --- PORTFOLIO DIRECT OVERRIDE ---
           if (lower.includes('portfolio')) {
             const speech = "Accessing your professional Framer portfolio now, Boss.";
             appendLog('JARVIS', speech);
@@ -171,8 +171,27 @@
             speakText(speech);
             return;
           }
-  
+
+          // --- MARKET TREND OVERRIDE ---
+          if (lower.includes('market trend')) {
+            const speech = "Pulling up the market trend data now, Boss.";
+            appendLog('JARVIS', speech);
+            handleAppLaunch('https://docs.google.com/spreadsheets/d/1_afyNp-kbIfktnT3nHX7ukQiFWAaQ3rkqIlmUlewdb4/edit?usp=drivesdk');
+            speakText(speech);
+            return;
+          }
+
+          // --- CORPORATE RADAR OVERRIDE ---
+          if (lower.includes('corporate radar')) {
+            const speech = "Accessing the corporate radar spreadsheet, Sir.";
+            appendLog('JARVIS', speech);
+            handleAppLaunch('https://docs.google.com/spreadsheets/d/1AiNSwxpgbmltOzasy8rNi7YxjF8JfuIPoNWr23Si5eA/edit?usp=drivesdk');
+            speakText(speech);
+            return;
+          }
+
           sendToGeminiDirectly(command);
+             
         }
       };
 

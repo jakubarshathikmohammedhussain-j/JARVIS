@@ -226,7 +226,21 @@
             speakText(speech);
             return;
           }
-
+          // --- CREATOR PROFILE / LINKEDIN OVERRIDE ---
+          if (
+            lower.includes('his profile') || 
+            lower.includes('creator profile') || 
+            lower.includes('his linkedin') || 
+            lower.includes('linkedin') ||
+            lower.includes('open creator')
+          ) {
+            const speech = "Opening Mohammed Hussain's LinkedIn profile now, Boss.";
+            appendLog('JARVIS', speech);
+            handleAppLaunch('https://www.linkedin.com/in/mohammedhussainj');
+            speakText(speech);
+            return;
+          }
+                  
                   
                   
           sendToGeminiDirectly(command);

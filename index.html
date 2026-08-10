@@ -189,7 +189,7 @@
             speakText(speech);
             return;
           }
-          // --- CREATOR / HOLO EARTH OVERRIDE ---
+                    // --- CREATOR / HOLO EARTH OVERRIDE ---
           if (
             lower.includes('who created') || 
             lower.includes('who made') || 
@@ -199,10 +199,11 @@
           ) {
             const speech = "In the Marvel Cinematic Universe, J.A.R.V.I.S. was created by Tony Stark under Stark Industries. However, this real-world AI system was engineered and created by Mohammed Hussain under HOLO EARTH.";
             appendLog('JARVIS', speech);
-            handleAppLaunch('https://www.linkedin.com/in/mohammedhussainj?utm_source=share_via&utm_content=profile&utm_medium=member_android');
+            handleAppLaunch('https://www.linkedin.com/in/mohammedhussainj');
             speakText(speech);
             return;
           }
+
                   
           sendToGeminiDirectly(command);
              

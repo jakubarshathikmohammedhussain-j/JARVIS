@@ -163,15 +163,15 @@
           appendLog('YOU', transcript);
           activateSession();
 
-          // --- PORTFOLIO DIRECT OVERRIDE ---
-          if (lower.includes('open my portfolio') || lower.includes('show my portfolio')) {
+                    // --- PORTFOLIO DIRECT OVERRIDE ---
+          if (lower.includes('portfolio')) {
             const speech = "Accessing your professional Framer portfolio now, Boss.";
             appendLog('JARVIS', speech);
             handleAppLaunch('https://mohammedhussain-j-mba.framer.website/');
             speakText(speech);
             return;
           }
-
+  
           sendToGeminiDirectly(command);
         }
       };

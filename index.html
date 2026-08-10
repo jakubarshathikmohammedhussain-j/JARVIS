@@ -217,9 +217,9 @@
       clearTimeout(sessionTimeoutTimer);
       sessionTimeoutTimer = setTimeout(() => {
         isSessionActive = false;
-        appendLog('SYS', '15-second conversational window closed. Awaiting wake word.');
+        appendLog('SYS', '60-second conversational window closed. Awaiting wake word.');
         updateState('idle');
-      }, 15000);
+      }, 60000);
     }
 
     async function sendToGeminiDirectly(message) {

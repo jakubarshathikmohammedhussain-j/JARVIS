@@ -1,10 +1,13 @@
 <div align="center">
 
-<!-- You can replace this GIF link with a recording of your actual Arc Reactor -->
-<img src="https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExM3Y2bXJtcjQ1NnA1cXV1ZWYydjF4ZnV5NXYyeTF2YXp2Nmx4ZzI5dSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/3o6Zt47FjBwR930vjO/giphy.webp" width="250" alt="Holo Earth Arc Reactor" />
+<!-- CINEMATIC HEADER FX -->
+<img src="https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/aqua.png" width="100%" alt="HUD Scanline" />
+<br><br>
+
+<img src="https://media.giphy.com/media/3o6Zt47FjBwR930vjO/giphy.gif" width="180" alt="Holo Earth Arc Reactor" />
 
 # ❖ H O L O _ E A R T H ❖
-## J.A.R.V.I.S. AUTONOMOUS OPERATING SYSTEM
+### J . A . R . V . I . S . // AUTONOMOUS OPERATING SYSTEM
 
 **Executive Decision Support & Friction Diagnostic Interface**
 

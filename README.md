@@ -1,135 +1,79 @@
 <div align="center">
 
-<!-- CINEMATIC HEADER FX -->
-<img src="https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/aqua.png" width="100%" alt="HUD Scanline" />
-<br><br>
-
-<img src="https://media.giphy.com/media/3o6Zt47FjBwR930vjO/giphy.gif" width="180" alt="Holo Earth Arc Reactor" />
+<!-- You can replace this GIF link with a recording of your actual Arc Reactor -->
+<img src="https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExM3Y2bXJtcjQ1NnA1cXV1ZWYydjF4ZnV5NXYyeTF2YXp2Nmx4ZzI5dSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/3o6Zt47FjBwR930vjO/giphy.webp" width="250" alt="Holo Earth Arc Reactor" />
 
 # ❖ H O L O _ E A R T H ❖
-### J . A . R . V . I . S . // AUTONOMOUS OPERATING SYSTEM
-<br>
+## J.A.R.V.I.S. AUTONOMOUS OPERATING SYSTEM
 
-[![System Status](https://img.shields.io/badge/System-ONLINE-00ffff?style=for-the-badge&logo=probot&logoColor=black)](#)
-[![Security Level](https://img.shields.io/badge/Clearance-APEX_PREDATOR-9d00ff?style=for-the-badge&logo=shield)](#)
-[![API Connection](https://img.shields.io/badge/Neural_Core-GEMINI-00d4ff?style=for-the-badge&logo=google)](#)
+**Executive Decision Support & Friction Diagnostic Interface**
 
-<img src="https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/aqua.png" width="100%" />
+[![System Status](https://img.shields.io/badge/System-ONLINE-00ffff?style=for-the-badge&logo=probot)](https://github.com/mohammedhussainj)
+[![Security Level](https://img.shields.io/badge/Clearance-APEX_PREDATOR-9d00ff?style=for-the-badge&logo=shield)](https://github.com/mohammedhussainj)
+[![API Connection](https://img.shields.io/badge/Gemini_Core-ACTIVE-00d4ff?style=for-the-badge&logo=google)](https://aistudio.google.com/)
 
 </div>
 
-<details>
-<summary><b><kbd>ACCESS SYSTEM DIAGNOSTICS</kbd></b> (Click to expand terminal...)</summary>
-<br>
+---
 
-```text
-[SYS.BOOT] Initializing primary servers... ▰▰▰▰▰▰▰▰▰▰ 100%
-[SYS.BOOT] Calibrating Audio Matrix....... ▰▰▰▰▰▰▰▰▰▰ 100%
-[SYS.BOOT] Bypassing OS task-killers...... ▰▰▰▰▰▰▰▰▰▰ 100%
-[API.LINK] Securing neural link to Gemini. ▰▰▰▰▰▰▰▰▰▰ 100%
-[SYSTEM]   Welcome back, Boss. All diagnostics are green.
-</details>
-✇ ARCHITECTURE OVERVIEW
-This repository houses the frontend neural shell for J.A.R.V.I.S. (Just A Rather Very Intelligent System)—a voice-driven, zero-latency heads-up display (HUD) built natively on Web Speech APIs and the Google Workspace ecosystem.
-Engineered strictly as a multi-tenant, zero-cost operational core, this interface serves as the central command routing hub for a 6-Node Autonomous Microservices Architecture.
-<div align="center">
-<img src="https://i.pinimg.com/originals/a0/0b/40/a00b40eb938507c3ceb5066d9c61ee36.gif" width="600" alt="Data Flow" />
-</div>
-✇ THE 6-NODE MICROSERVICES PIPELINE
-(Select a node protocol to view operational parameters)
-<details>
-<summary><b><kbd>NODE 01 : ALL DAY</kbd></b> // Human Capital & Biological Gamification</summary>
+> **[SYS.LOG]** Initialize Audio Matrix... **COMPLETE**
+> **[SYS.LOG]** Bypass background OS task-killers... **COMPLETE**
+> **[SYS.LOG]** Establishing neural link to Google Gemini Core... **COMPLETE**
+> **[SYS.LOG]** Welcome back, Boss. All diagnostics are green.
 
+---
 
-<blockquote>
-<b>Focus:</b> Converts biological health and daily discipline into a gamified RPG tracking engine.
+## ▧ ARCHITECTURE OVERVIEW
 
-<b>Stack:</b> Google Forms, Sheets Relational Database, Native Triggers, Gemini Logic Core.
+This repository houses the frontend neural shell for **J.A.R.V.I.S.** (Just A Rather Very Intelligent System)—a voice-driven, zero-latency heads-up display (HUD) built natively on Web Speech APIs and the Google Workspace ecosystem. 
 
-<b>Pipeline:</b> Tracks Water (3L+), Active Recovery, Steps, Protein (90-120g), and Meditation. Dynamically upgrades user rank and enforces EXP penalties for missed targets.
-</blockquote>
-</details>
-<details>
-<summary><b><kbd>NODE 02 : BLAST</kbd></b> // Asynchronous Corporate Thought Leadership</summary>
+Engineered strictly as a multi-tenant, zero-cost operational core, this interface serves as the central command routing hub for a **6-Node Autonomous Microservices Architecture**.
 
+### ⚡ The Visual FX Engine
+The HUD is driven by custom CSS keyframe animations, featuring a responsive, pulsing Arc Reactor visualizer that dynamically reacts to browser audio states. Terminal logs output sequentially in a monospace layout, styled with deep `#2c003e` (Dark Purple) and `#00ffff` (Cyan) holographic accents.
 
-<blockquote>
-<b>Focus:</b> Decouples content generation from physical time.
+---
 
-<b>Stack:</b> Structured Google Docs, Gemini API Engine, Time-Based Triggers.
+## ▧ THE 6-NODE MICROSERVICES PIPELINE
 
-<b>Pipeline:</b> At 9:45 AM IST, synthesizes publication-ready thought leadership from a 500-hook matrix covering P&L Leaks, Governance, and Supply Chain.
-</blockquote>
-</details>
-<details>
-<summary><b><kbd>NODE 03 : GHOST</kbd></b> // Global Mobility & Recruitment Reconnaissance</summary>
+The operating system is partitioned into six distinct, autonomous nodes decoupled from the frontend shell to ensure maximum system resilience.
 
+| Node | Designation | Operational Focus | Primary Infrastructure |
+| :--- | :--- | :--- | :--- |
+| **01** | `ALL DAY` | Human Capital & Biological Gamification | Forms, Sheets, Apps Script |
+| **02** | `BLAST` | Asynchronous Corporate Thought Leadership | Gemini, Google Docs, Cron |
+| **03** | `GHOST` | Global Mobility & Recruitment Reconnaissance | Web Scraping, Gemini Parsing |
+| **04** | `RICH` | Real-time Equities & Intrinsic Capital Heuristics | Google Finance, Sheets Analytics |
+| **05** | `SENTINEL` | Macro-Economic Friction Diagnostic Engine | Make, RSS, Gemini, Sheets |
+| **06** | `O.M.E.G.A.` | Overseas Maritime Evaluation & Global Alerting | Logistics APIs, Mapping Core, Gemini |
 
-<blockquote>
-<b>Focus:</b> A continuous global reconnaissance drone hunting for elite consulting & AI roles.
+---
 
-<b>Stack:</b> Job Board APIs, Gemini Semantic Parsing, Sheets Ledger.
+## ▧ NODE 06: O.M.E.G.A.
+**(Overseas Maritime Evaluation & Global Alerting)**
 
-<b>Pipeline:</b> Evaluates global mobility flags and explicitly confirmed Visa Sponsorships across international hubs (Chennai, UK, Singapore, Dubai).
-</blockquote>
-</details>
-<details>
-<summary><b><kbd>NODE 04 : RICH</kbd></b> // Real-time Intrinsic Capital Heuristics</summary>
+*   **Core Identity:** A continuous global logistics and freight reconnaissance engine.
+*   **The Problem Solved:** Eliminates blind spots in international supply chains, automating tracking and predictive delay alerting for critical cross-border freight.
+*   **Infrastructure Stack:** Global Shipping/Maritime APIs, Gemini Intelligence, Automated Email/SMS Event Routing.
+*   **Operational Pipeline:**
+    *   **Asset Ingestion:** Continuously monitors the movement of high-value physical assets across complex international routes.
+    *   **Global Routing:** Orchestrates and evaluates logistics data for multi-node shipments—ranging from heavy electronics dispatched from the Chicago area, to textile and medicine freight maneuvering through distribution hubs like Virudhunagar and Arupukottai.
+    *   **Friction Alerting:** Bypasses manual airway bill (AWB) or container tracking by identifying port congestion, customs delays, or routing anomalies, dispatching real-time mitigation alerts directly to the executive interface.
+*   **Enterprise Translation:** Proves advanced capability in global supply chain management and automated logistics architecture, treating the physical movement of goods with the same algorithmic precision as digital data.
 
+---
 
-<blockquote>
-<b>Focus:</b> Autonomous financial tracking and quantitative tracking.
+## ▧ CORE FEATURES & OVERRIDES
 
-<b>Stack:</b> Google Finance Data Pipelines, Gemini Parsing, Sheets Analytics Engine.
+### 🎙️ The 60-Second Audio Matrix
+The system utilizes continuous ambient listening via the `SpeechRecognition` API. By manipulating the `setTimeout` function and DOM refresh rates, J.A.R.V.I.S. maintains a 60-second active memory window, bypassing aggressive mobile browser background-tab suspensions.
 
-<b>Pipeline:</b> Evaluates end-of-day metrics for 13 enterprise equities across Big Tech, Global Finance, and Logistics, rendering weekly multi-stock BI graphs.
-</blockquote>
-</details>
-<details>
-<summary><b><kbd>NODE 05 : SENTINEL</kbd></b> // Systematic PESTLE & Friction Diagnostic</summary>
+### 🚀 Local Hard-Coded Overrides (Zero Latency)
+To conserve API quota and eliminate cloud latency for critical operations, the routing engine utilizes a local JavaScript intercept matrix. 
 
-
-<blockquote>
-<b>Focus:</b> Macro-economic and regulatory arbitrage engine.
-
-<b>Stack:</b> Make/Zapier, RSS, Gemini, Dual-Tab Ledger.
-
-<b>Pipeline:</b> Ingests public APIs, applies deduplication, identifies operational friction (margin compression, compliance), and delivers a 12:30 PM IST formatted Gmail executive briefing.
-</blockquote>
-</details>
-<details>
-<summary><b><kbd>NODE 06 : O.M.E.G.A.</kbd></b> // Overseas Maritime Evaluation & Alerting</summary>
-
-
-<blockquote>
-<b>Focus:</b> Eliminates blind spots in international supply chains.
-
-<b>Stack:</b> Global Maritime APIs, Gemini Intelligence, Automated Alert Routing.
-
-<b>Pipeline:</b> Monitors asset movement (electronics from Chicago, textiles from Arupukottai). Bypasses manual tracking by predicting port congestion and dispatching mitigation alerts directly to the HUD.
-</blockquote>
-</details>
-✇ COMMAND PROTOCOLS & OVERRIDES
-To conserve API quota and eliminate cloud latency, J.A.R.V.I.S. utilizes a hard-coded local JavaScript intercept matrix.
-⚡ Active Voice Intercepts (Zero Latency)
-<kbd>"Show Market Trend"</kbd> ➔ Executes RICH Node Dashboard
-<kbd>"Open Corporate Radar"</kbd> ➔ Executes SENTINEL Intelligence Ledger
-<kbd>"Open Portfolio"</kbd> ➔ Launches Framer Deployment
-<kbd>"Activate Bleed Protocol"</kbd> ➔ Triggers Streamlit Interface
-<kbd>"Initialize O.M.E.G.A."</kbd> ➔ Connects to Global Logistics Matrix
-✇ INITIATION SEQUENCE
-To fork and deploy your own instance of the HOLO EARTH shell:
-1.Clone the Neural Core:
-https://jakubarshathikmohammedhussain-j.github.io/JARVIS/
-2.Deploy to GitHub Pages:
-Navigate to Settings ➔ Pages and deploy the main branch.
-3.Initialize the Matrix:
-Open the deployment on a mobile device, tap <kbd>INITIALIZE AUDIO MATRIX</kbd>, and input your API key into the secure local vault.
-4.Command the System:
-Speak directly to the interface: "Jarvis, what is the current system status?"
-<div align="center">
-<img src="https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/aqua.png" width="100%" />
-"In the Marvel Cinematic Universe, J.A.R.V.I.S. was created by Tony Stark under Stark Industries. However, this real-world AI system was engineered and created by Mohammed Hussain under HOLO EARTH."
-Architect: Mohammed Hussain | Division: HOLO EARTH
-<kbd>✇ VIEW CREATOR CREDENTIALS</kbd>
-</div>
+```javascript
+// Example: Instant Local Intercept Matrix
+if (lower.includes('bleed protocol')) {
+    executeProtocol('[https://bleed-protocol.streamlit.app/](https://bleed-protocol.streamlit.app/)');
+    return; // AI Core Bypassed
+}

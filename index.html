@@ -197,6 +197,15 @@
             speakText(speech);
             return;
           }       
+                            // --- SCAM PROTOCOL OVERRIDE ---
+          if (lower.includes('scam protocol')) {
+            const speech = "Activating Scam Protocol now, Boss.";
+            appendLog('JARVIS', speech);
+            handleAppLaunch('https://scam-protocol.streamlit.app/?token=holo-earth');
+            speakText(speech);
+            return;
+          }
+                  
                             // --- CREATOR / HOLO EARTH OVERRIDE ---
           if (
             lower.includes('who created') || 

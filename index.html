@@ -162,12 +162,43 @@
           let command = transcript.replace(/jarvis/gi, '').trim() || 'Awaiting directive.';
           appendLog('YOU', transcript);
           activateSession();
+                  
+                  // --- MASTER CONTROL OVERRIDES ---
+if (lower.includes('unlock master control')) {
+  isMasterControlUnlocked = true;
+  const speech = "Master control authorized. Security clearances unlocked, Boss.";
+  appendLog('JARVIS', speech);
+  speakText(speech);
+  return;
+}
+
+if (lower.includes('lock master control')) {
+  isMasterControlUnlocked = false;
+  const speech = "Master control locked. High-clearance protocols secured.";
+  appendLog('JARVIS', speech);
+  speakText(speech);
+  return;
+}
+
+// Check if user is trying to access a locked protocol
+const secureCommands = ['portfolio', 'bleed protocol', 'market trend', 'corporate radar', 'scam protocol'];
+const isTryingSecureCommand = secureCommands.some(cmd => lower.includes(cmd));
+
+if (isTryingSecureCommand) {
+  if (!isMasterControlUnlocked) {
+     const speech = "Access denied. Master Control authorization required.";
+     appendLog('JARVIS', speech);
+     speakText(speech);
+     return; 
+  }
+  // If unlocked, it drops down and executes the normal blocks!
+}
 
                               // --- PORTFOLIO DIRECT OVERRIDE ---
           if (lower.includes('portfolio')) {
             const speech = "Accessing your professional Framer portfolio now, Boss.";
             appendLog('JARVIS', speech);
-            handleAppLaunch('https://mohammedhussain-j-mba.framer.website/');
+            handleAppLaunch('https://jakubarshathikmohammedhussain-j.github.io/Portfolio/');
             speakText(speech);
             return;
           }

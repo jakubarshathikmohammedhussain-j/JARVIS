@@ -140,10 +140,28 @@
     });
 
     function loadVoices() {
-      const voices = window.speechSynthesis.getVoices();
-      selectedVoice = voices.find(v => (v.lang.includes('en-GB') || v.lang.includes('en_GB')) && (v.name.includes('Male') || v.name.includes('Daniel'))) || voices[0];
+    const voices = window.speechSynthesis.getVoices();
+
+    const preferredVoices = [
+        "Google UK English Male",
+        "en-GB-Network",
+        "en-GB-Wavenet-D",
+        "Microsoft Mark",
+        "Daniel"
+    ];
+
+    selectedVoice = voices.find(v => preferredVoices.some(preferred => v.name.includes(preferred)));
+
+    if (!selectedVoice) {
+        selectedVoice = voices.find(v => v.lang.includes('en-GB') && v.name.toLowerCase().includes('male'));
     }
-    window.speechSynthesis.onvoiceschanged = loadVoices;
+
+    if (!selectedVoice) {
+        selectedVoice = voices.find(v => v.lang.includes('en-GB') || v.lang.includes('en_GB'));
+    }
+}
+
+window.speechSynthesis.onvoiceschanged = loadVoices;
 
     function setupRecognition() {
       const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -381,24 +399,28 @@ if (isTryingSecureCommand) {
     }
 
     function speakText(text) {
-      if (!text) return;
-      window.speechSynthesis.cancel();
-      const utterance = new SpeechSynthesisUtterance(text);
-      if (selectedVoice) utterance.voice = selectedVoice;
-      
-      isJarvisSpeaking = true;
-      updateState('speaking');
-      try { recognition.abort(); } catch(e){}
+  if (!text) return;
+  window.speechSynthesis.cancel();
+  const utterance = new SpeechSynthesisUtterance(text);
+  if (selectedVoice) utterance.voice = selectedVoice;
 
-      utterance.onend = utterance.onerror = () => {
-        isJarvisSpeaking = false;
-        updateState(isSessionActive ? 'listening' : 'idle');
-        if (initBtn.style.display === 'none') {
-          setTimeout(() => { try { recognition.start(); } catch(e){} }, 500);
-        }
-      };
-      window.speechSynthesis.speak(utterance);
+  // --- ACOUSTIC TUNING: MALE VOICE & SMOOTHING ---
+  utterance.rate = 1.05;  // Speeds up slightly to reduce awkward pauses
+  utterance.pitch = 0.85; // Lowers pitch for a deeper male voice
+
+  isJarvisSpeaking = true;
+  updateState('speaking');
+  try { recognition.abort(); } catch(e){}
+
+  utterance.onend = utterance.onerror = () => {
+    isJarvisSpeaking = false;
+    updateState(isSessionActive ? 'listening' : 'idle');
+    if (initBtn.style.display === 'none') {
+       setTimeout(() => { try { recognition.start(); } catch(e){} }, 500);
     }
+  };
+  window.speechSynthesis.speak(utterance);
+}
 
     function updateState(state) {
       statusBadge.innerText = state.toUpperCase();

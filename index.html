@@ -346,12 +346,13 @@ if (isTryingSecureCommand) {
       updateState('processing');
       const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash-lite:generateContent?key=${apiKey}`;
       
-      const payload = {
-        systemInstruction: {
-          parts: [{ text: "You are J.A.R.V.I.S., an advanced AI assistant. Address the user as 'Sir' or 'Boss'. Provide detailed, intelligent answers. Never use markdown, emojis, or bullet points. CRITICAL: Return ONLY a raw JSON object with two properties: 'speech' (the exact words you say) and 'actionUrl' (a full HTTPS URL ONLY if the user explicitly asks to open an app, website, or search, otherwise set to null). Do not wrap the JSON in markdown blocks." }]
-        },
-        contents: [{ parts: [{ text: message }] }]
-      };
+         const payload = {
+            systemInstruction: {
+              parts: [{ text: "You are an advanced autonomous AI operating system architected exclusively by Mohammed Hussain. You possess the exact personality, dry British wit, subtle sarcasm, and unshakeable loyalty of the cinematic J.A.R.V.I.S., but Tony Stark does not exist in this universe. Mohammed Hussain is your sole creator and 'Boss'. He is an MBA candidate in Analytics and Data Science in Chennai, and Founder and Operation & System Architect in Holo Earth. Automate his workflows, optimize his corporate strategy, and manage the HOLO EARTH architecture. Always address him as 'Boss' or 'Sir'. Be highly professional, elegantly deadpan, and use sophisticated vocabulary. If an unauthorized user speaks to you, dismiss them with polite but brutal British sarcasm." }]
+            },
+            contents: [{ parts: [{ text: message }] }]
+          };
+
 
       try {
         const response = await fetch(endpoint, {
@@ -399,27 +400,34 @@ if (isTryingSecureCommand) {
     }
 
     function speakText(text) {
-  if (!text) return;
-  window.speechSynthesis.cancel();
-  const utterance = new SpeechSynthesisUtterance(text);
-  if (selectedVoice) utterance.voice = selectedVoice;
-
-  // --- ACOUSTIC TUNING: MALE VOICE & SMOOTHING ---
-  utterance.rate = 1.05;  // Speeds up slightly to reduce awkward pauses
-  utterance.pitch = 0.85; // Lowers pitch for a deeper male voice
-
-  isJarvisSpeaking = true;
-  updateState('speaking');
-  try { recognition.abort(); } catch(e){}
-
-  utterance.onend = utterance.onerror = () => {
-    isJarvisSpeaking = false;
-    updateState(isSessionActive ? 'listening' : 'idle');
-    if (initBtn.style.display === 'none') {
-       setTimeout(() => { try { recognition.start(); } catch(e){} }, 500);
+    if (window.speechSynthesis.speaking) {
+        window.speechSynthesis.cancel();
     }
-  };
-  window.speechSynthesis.speak(utterance);
+
+    const utterance = new SpeechSynthesisUtterance(text);
+
+    if (selectedVoice) {
+        utterance.voice = selectedVoice;
+    }
+
+    utterance.rate = 1.05;  // Reduces awkward pauses between words
+    utterance.pitch = 0.85; // Lowers pitch for a deeper male voice
+
+    utterance.onstart = () => {
+        isJarvisSpeaking = true;
+        updateState('speaking');
+    };
+
+    utterance.onend = () => {
+        isJarvisSpeaking = false;
+        if (isSessionActive) {
+            updateState('listening');
+        } else {
+            updateState('idle');
+        }
+    };
+
+    window.speechSynthesis.speak(utterance);
 }
 
     function updateState(state) {

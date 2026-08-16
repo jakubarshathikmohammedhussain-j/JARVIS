@@ -230,17 +230,18 @@ if (isTryingSecureCommand) {
             return;
           }
                   
-                    // --- MARKET TREND OVERRIDE (RICH NODE 04) ---
-          const trendMatch = lower.match(/market trends?\s+(?:about|for|of|on)\s+(.+)/i);
-          if (trendMatch) {
-            const company = trendMatch[1].trim();
+                              // --- MARKET TREND OVERRIDE (RICH NODE 04) ---
+          if (lower.includes('market trend about') || lower.includes('market trends about')) {
+            const company = lower.includes('market trends') 
+                ? lower.split('market trends about')[1].trim() 
+                : lower.split('market trend about')[1].trim();
             
             const initSpeech = `Querying the R I C H database for ${company}...`;
             appendLog('JARVIS', initSpeech);
             speakText(initSpeech);
 
-            // YOUR LIVE NODE 04 API ENDPOINT
-            const node4API = "https://script.google.com/macros/s/AKfycbwmt54IlV786-fBZAPBSH6REbiGZl2BEqdSf_xe9vwNOLzF2Xgi-ArVBTVjvsWTxGL-tg/exec"; 
+            // YOUR NEW LIVE NODE 04 API ENDPOINT
+            const node4API = "https://script.google.com/macros/s/AKfycbwXElw10LJ-lWOhGXkJGaXoU9mBc-3kkFpXIk4Smmdv_OcwvX81vXxkl9voLdBW04WMLA/exec"; 
             
             fetch(`${node4API}?company=${encodeURIComponent(company)}`)
               .then(response => response.json())

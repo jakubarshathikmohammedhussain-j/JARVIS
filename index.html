@@ -258,14 +258,60 @@ if (isTryingSecureCommand) {
           }
 
 
-          // --- CORPORATE RADAR OVERRIDE ---
-          if (lower.includes('corporate radar')) {
-            const speech = "Accessing the corporate radar spreadsheet, Sir.";
-            appendLog('JARVIS', speech);
-            handleAppLaunch('https://docs.google.com/spreadsheets/d/1AiNSwxpgbmltOzasy8rNi7YxjF8JfuIPoNWr23Si5eA/edit?usp=drivesdk');
-            speakText(speech);
-            return;
-          }       
+          // --- CORPORATE RADAR OVERRIDE   // --- SENTINEL NODE: UNIFIED MULTI-MODE API ---
+
+function doGet(e) {
+  const ss = SpreadsheetApp.openById("YOUR_SENTINEL_SPREADSHEET_ID_HERE");
+  const sheet = ss.getSheetByName("Target Entity Policy Radar");
+  
+  if (!sheet) {
+    return ContentService.createTextOutput(JSON.stringify({ speech: "Sentinel database sheet not found." }))
+      .setMimeType(ContentService.MimeType.JSON);
+  }
+
+  const data = sheet.getDataRange().getValues();
+  let responseText = "";
+
+  // MODE 1: Target Entity Deep-Dive
+  if (e.parameter.company) {
+    const targetCompany = e.parameter.company.toLowerCase().trim();
+    for (let i = data.length - 1; i >= 1; i--) {
+      let rowCompany = data[i][1] ? data[i][1].toString().toLowerCase() : "";
+      if (rowCompany.includes(targetCompany)) {
+        responseText = `Corporate Radar on ${data[i][1]}: ${data[i][4]} Strategy recommendation: ${data[i][6]}`;
+        break;
+      }
+    }
+    if (!responseText) responseText = `No recent intelligence found for ${targetCompany}.`;
+  }
+  
+  // MODE 2: Global Absolute Latest
+  else if (e.parameter.mode === "latest") {
+    const lastRow = data[data.length - 1];
+    responseText = `Latest recorded intel in Sentinel is for ${lastRow[1]} in the ${lastRow[2]} sector: ${lastRow[4]} Strategic initiative: ${lastRow[6]}`;
+  }
+  
+  // MODE 3: Date-Specific Briefing (Defaults to today if requested)
+  else if (e.parameter.date) {
+    const targetDate = e.parameter.date.trim();
+    let matches = [];
+    for (let i = 1; i < data.length; i++) {
+      let rowDate = data[i][0] ? data[i][0].toString() : "";
+      if (rowDate.includes(targetDate)) {
+        matches.push(`${data[i][1]}: ${data[i][4]}`);
+      }
+    }
+    if (matches.length > 0) {
+      responseText = `Intel briefing for ${targetDate}. Logged events: ${matches.join(". ")}`;
+    } else {
+      responseText = `No intelligence events recorded under date ${targetDate}.`;
+    }
+  }
+
+  return ContentService.createTextOutput(JSON.stringify({ speech: responseText }))
+    .setMimeType(ContentService.MimeType.JSON);
+}
+
                             // --- SCAM PROTOCOL OVERRIDE ---
           if (lower.includes('scam protocol')) {
             const speech = "Activating Scam Protocol now, Boss.";

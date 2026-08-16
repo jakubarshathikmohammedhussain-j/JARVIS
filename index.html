@@ -230,14 +230,31 @@ if (isTryingSecureCommand) {
             return;
           }
                   
-          // --- MARKET TREND OVERRIDE ---
-          if (lower.includes('market trend')) {
-            const speech = "Pulling up the market trend data now, Boss.";
-            appendLog('JARVIS', speech);
-            handleAppLaunch('https://docs.google.com/spreadsheets/d/1_afyNp-kbIfktnT3nHX7ukQiFWAaQ3rkqIlmUlewdb4/edit?usp=drivesdk');
-            speakText(speech);
+          // --- MARKET TREND OVERRIDE (RICH NODE 04) ---
+          if (lower.includes('market trend about')) {
+            const company = lower.split('market trend about')[1].trim();
+            
+            const initSpeech = `Querying the R I C H database for ${company}...`;
+            appendLog('JARVIS', initSpeech);
+            speakText(initSpeech);
+
+            // YOUR LIVE NODE 04 API ENDPOINT
+            const node4API = "https://script.google.com/macros/s/AKfycbwmt54IlV786-fBZAPBSH6REbiGZl2BEqdSf_xe9vwNOLzF2Xgi-ArVBTVjvsWTxGL-tg/exec"; 
+            
+            fetch(`${node4API}?company=${encodeURIComponent(company)}`)
+              .then(response => response.json())
+              .then(data => {
+                appendLog('JARVIS', data.speech);
+                speakText(data.speech);
+              })
+              .catch(error => {
+                const errSpeech = "Sir, I am experiencing packet loss and cannot establish a handshake with Node 04.";
+                appendLog('JARVIS', errSpeech);
+                speakText(errSpeech);
+              });
             return;
           }
+                  
 
           // --- CORPORATE RADAR OVERRIDE ---
           if (lower.includes('corporate radar')) {

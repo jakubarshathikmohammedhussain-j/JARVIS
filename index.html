@@ -230,7 +230,7 @@ if (isTryingSecureCommand) {
             return;
           }
                   
-                              // --- MARKET TREND OVERRIDE (RICH NODE 04) ---
+                                        // --- MARKET TREND OVERRIDE (RICH NODE 04) ---
           if (lower.includes('market trend about') || lower.includes('market trends about')) {
             const company = lower.includes('market trends') 
                 ? lower.split('market trends about')[1].trim() 
@@ -240,8 +240,8 @@ if (isTryingSecureCommand) {
             appendLog('JARVIS', initSpeech);
             speakText(initSpeech);
 
-            // YOUR NEW LIVE NODE 04 API ENDPOINT
-            const node4API = "https://script.google.com/macros/s/AKfycbwXElw10LJ-lWOhGXkJGaXoU9mBc-3kkFpXIk4Smmdv_OcwvX81vXxkl9voLdBW04WMLA/exec"; 
+            // YOUR PATCHED LIVE NODE 04 API ENDPOINT
+            const node4API = "https://script.google.com/macros/s/AKfycbwor-czDXhovjZ5ziNJcscZzn6eBh2ViMGnekL3m6ru7kgwgicy-K5IyR2dz1SXAehIdg/exec"; 
             
             fetch(`${node4API}?company=${encodeURIComponent(company)}`)
               .then(response => response.json())
@@ -256,6 +256,7 @@ if (isTryingSecureCommand) {
               });
             return;
           }
+
 
           // --- CORPORATE RADAR OVERRIDE ---
           if (lower.includes('corporate radar')) {

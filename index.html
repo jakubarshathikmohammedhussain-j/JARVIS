@@ -258,23 +258,28 @@ if (isTryingSecureCommand) {
           }
 
 
-                                                 // --- CORPORATE RADAR OVERRIDE (SENTINEL NODE FRONTEND) ---
-          if (lower.includes('corporate radar')) {
+                                                           // --- CORPORATE RADAR OVERRIDE (SENTINEL NODE FRONTEND) ---
+          if (lower.includes('corporate radar') || lower.includes('corporate rader')) {
             let endpointUrl = "https://script.google.com/macros/s/AKfycbwbLQbl7rvluHhjr0HbhzCfX0OgmT7ZeSgyROH8uB2w8v2984LaOxKOyGLkqfD-gFz5og/exec";
             let fetchUrl = "";
             let initSpeech = "";
 
-            if (lower.includes('latest corporate radar update')) {
+            if (lower.includes('latest corporate radar update') || lower.includes('latest corporate rader update') || lower.includes('latest corporate rader updates')) {
               initSpeech = "Pulling the latest Sentinel update, Boss.";
               fetchUrl = endpointUrl + "?mode=latest";
             } 
-            else if (lower.includes('corporate radar briefing for')) {
-              const dateParam = lower.split('corporate radar briefing for')[1].trim();
+            else if (lower.includes('corporate radar briefing for') || lower.includes('corporate rader briefing for')) {
+              const triggerText = lower.includes('corporate radar briefing for') ? 'corporate radar briefing for' : 'corporate rader briefing for';
+              const dateParam = lower.split(triggerText)[1].trim();
               initSpeech = "Compiling Sentinel briefing for " + dateParam + "...";
               fetchUrl = endpointUrl + "?date=" + encodeURIComponent(dateParam);
             } 
-            else if (lower.includes('corporate radar on') || lower.includes('corporate radar about')) {
-              const triggerPhrase = lower.includes('corporate radar on') ? 'corporate radar on' : 'corporate radar about';
+            else if (lower.includes('corporate radar on') || lower.includes('corporate radar about') || lower.includes('corporate rader on') || lower.includes('corporate rader about')) {
+              let triggerPhrase = "corporate radar on";
+              if (lower.includes('corporate radar about')) triggerPhrase = "corporate radar about";
+              if (lower.includes('corporate rader on')) triggerPhrase = "corporate rader on";
+              if (lower.includes('corporate rader about')) triggerPhrase = "corporate rader about";
+
               const companyParam = lower.split(triggerPhrase)[1].trim();
               initSpeech = "Scanning the Sentinel network for " + companyParam + "...";
               fetchUrl = endpointUrl + "?company=" + encodeURIComponent(companyParam);

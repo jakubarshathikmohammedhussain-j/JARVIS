@@ -400,37 +400,56 @@ if (isTryingSecureCommand) {
       logContent.scrollTop = logContent.scrollHeight;
     }
 
-    function speakText(text) {
-    if (window.speechSynthesis.speaking) {
-        window.speechSynthesis.cancel();
+  function speakText(text) {
+  if (!text) return;
+  window.speechSynthesis.cancel();
+
+  let spokenText = text.replace(/J\.A\.R\.V\.I\.S\.?/gi, "Jarvis");
+  
+  const utterance = new SpeechSynthesisUtterance(spokenText);
+  if (selectedVoice) utterance.voice = selectedVoice;
+
+  utterance.rate = 1.05;  
+  utterance.pitch = 0.85; 
+
+  isJarvisSpeaking = true;
+  updateState('speaking');
+  try { recognition.abort(); } catch(e){}
+
+  // THE FIX 1: Attach to window to prevent Android Chrome Garbage Collection
+  window.currentUtterance = utterance;
+
+  // Clear any old heartbeat loops before starting a new one
+  if (window.jarvisHeartbeat) clearInterval(window.jarvisHeartbeat);
+
+  utterance.onend = utterance.onerror = () => {
+    isJarvisSpeaking = false;
+    clearInterval(window.jarvisHeartbeat); // Kill the heartbeat monitor
+    updateState(isSessionActive ? 'listening' : 'idle');
+    if (initBtn.style.display === 'none') {
+       setTimeout(() => { try { recognition.start(); } catch(e){} }, 500);
     }
+  };
+  
+  // THE FIX 2: Dynamic Heartbeat Monitor
+  window.jarvisHeartbeat = setInterval(() => {
+     // A known Android Chrome bypass: triggering resume() keeps long speeches from timing out
+     window.speechSynthesis.resume(); 
 
-    const utterance = new SpeechSynthesisUtterance(text);
+     // If the browser audio engine mathematically confirms it has stopped speaking, 
+     // but our 'onend' event failed to fire (the Android bug), we manually unlock the system.
+     if (!window.speechSynthesis.speaking && isJarvisSpeaking) {
+         isJarvisSpeaking = false;
+         clearInterval(window.jarvisHeartbeat);
+         updateState(isSessionActive ? 'listening' : 'idle');
+         if (initBtn.style.display === 'none') {
+             try { recognition.start(); } catch(e){}
+         }
+     }
+  }, 5000); // Check the engine status every 5 seconds
 
-    if (selectedVoice) {
-        utterance.voice = selectedVoice;
-    }
-
-    utterance.rate = 1.05;  // Reduces awkward pauses between words
-    utterance.pitch = 0.85; // Lowers pitch for a deeper male voice
-
-    utterance.onstart = () => {
-        isJarvisSpeaking = true;
-        updateState('speaking');
-    };
-
-    utterance.onend = () => {
-        isJarvisSpeaking = false;
-        if (isSessionActive) {
-            updateState('listening');
-        } else {
-            updateState('idle');
-        }
-    };
-
-    window.speechSynthesis.speak(utterance);
+  window.speechSynthesis.speak(utterance);
 }
-
     function updateState(state) {
       statusBadge.innerText = state.toUpperCase();
       arcReactor.className = `arc-reactor state-${state}`;

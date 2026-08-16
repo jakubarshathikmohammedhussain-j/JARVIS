@@ -230,9 +230,10 @@ if (isTryingSecureCommand) {
             return;
           }
                   
-          // --- MARKET TREND OVERRIDE (RICH NODE 04) ---
-          if (lower.includes('market trend about')) {
-            const company = lower.split('market trend about')[1].trim();
+                    // --- MARKET TREND OVERRIDE (RICH NODE 04) ---
+          const trendMatch = lower.match(/market trends?\s+(?:about|for|of|on)\s+(.+)/i);
+          if (trendMatch) {
+            const company = trendMatch[1].trim();
             
             const initSpeech = `Querying the R I C H database for ${company}...`;
             appendLog('JARVIS', initSpeech);
@@ -254,7 +255,6 @@ if (isTryingSecureCommand) {
               });
             return;
           }
-                  
 
           // --- CORPORATE RADAR OVERRIDE ---
           if (lower.includes('corporate radar')) {

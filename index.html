@@ -258,59 +258,50 @@ if (isTryingSecureCommand) {
           }
 
 
-          // --- CORPORATE RADAR OVERRIDE   // --- SENTINEL NODE: UNIFIED MULTI-MODE API ---
+                    // --- CORPORATE RADAR OVERRIDE (SENTINEL NODE FRONTEND) ---
+          if (lower.includes('corporate radar')) {
+            let endpointUrl = "https://script.google.com/macros/s/AKfycbxCoWPaExs_15xpbr3B44qLlE6vX_MNLUqSUvQpaTTWuUvO-WCYb_tjuIqsTGrQRt7KSQ/exec";
+            let fetchUrl = "";
+            let initSpeech = "";
 
-function doGet(e) {
-  const ss = SpreadsheetApp.openById("YOUR_SENTINEL_SPREADSHEET_ID_HERE");
-  const sheet = ss.getSheetByName("Target Entity Policy Radar");
-  
-  if (!sheet) {
-    return ContentService.createTextOutput(JSON.stringify({ speech: "Sentinel database sheet not found." }))
-      .setMimeType(ContentService.MimeType.JSON);
-  }
+            if (lower.includes('latest corporate radar update')) {
+              initSpeech = "Pulling the latest Sentinel update, Boss.";
+              fetchUrl = `${endpointUrl}?mode=latest`;
+            } 
+            else if (lower.includes('corporate radar briefing for')) {
+              const dateParam = lower.split('corporate radar briefing for')[1].trim();
+              initSpeech = `Compiling Sentinel briefing for ${dateParam}...`;
+              fetchUrl = `${endpointUrl}?date=${encodeURIComponent(dateParam)}`;
+            } 
+            else if (lower.includes('corporate radar on') || lower.includes('corporate radar about')) {
+              const triggerPhrase = lower.includes('corporate radar on') ? 'corporate radar on' : 'corporate radar about';
+              const companyParam = lower.split(triggerPhrase)[1].trim();
+              initSpeech = `Scanning the Sentinel network for ${companyParam}...`;
+              fetchUrl = `${endpointUrl}?company=${encodeURIComponent(companyParam)}`;
+            } 
+            else {
+               initSpeech = "Sentinel network accessed. Please specify a target company, a date, or ask for the latest update.";
+               appendLog('JARVIS', initSpeech);
+               speakText(initSpeech);
+               return;
+            }
 
-  const data = sheet.getDataRange().getValues();
-  let responseText = "";
-
-  // MODE 1: Target Entity Deep-Dive
-  if (e.parameter.company) {
-    const targetCompany = e.parameter.company.toLowerCase().trim();
-    for (let i = data.length - 1; i >= 1; i--) {
-      let rowCompany = data[i][1] ? data[i][1].toString().toLowerCase() : "";
-      if (rowCompany.includes(targetCompany)) {
-        responseText = `Corporate Radar on ${data[i][1]}: ${data[i][4]} Strategy recommendation: ${data[i][6]}`;
-        break;
-      }
-    }
-    if (!responseText) responseText = `No recent intelligence found for ${targetCompany}.`;
-  }
-  
-  // MODE 2: Global Absolute Latest
-  else if (e.parameter.mode === "latest") {
-    const lastRow = data[data.length - 1];
-    responseText = `Latest recorded intel in Sentinel is for ${lastRow[1]} in the ${lastRow[2]} sector: ${lastRow[4]} Strategic initiative: ${lastRow[6]}`;
-  }
-  
-  // MODE 3: Date-Specific Briefing (Defaults to today if requested)
-  else if (e.parameter.date) {
-    const targetDate = e.parameter.date.trim();
-    let matches = [];
-    for (let i = 1; i < data.length; i++) {
-      let rowDate = data[i][0] ? data[i][0].toString() : "";
-      if (rowDate.includes(targetDate)) {
-        matches.push(`${data[i][1]}: ${data[i][4]}`);
-      }
-    }
-    if (matches.length > 0) {
-      responseText = `Intel briefing for ${targetDate}. Logged events: ${matches.join(". ")}`;
-    } else {
-      responseText = `No intelligence events recorded under date ${targetDate}.`;
-    }
-  }
-
-  return ContentService.createTextOutput(JSON.stringify({ speech: responseText }))
-    .setMimeType(ContentService.MimeType.JSON);
-}
+            appendLog('JARVIS', initSpeech);
+            speakText(initSpeech);
+            
+            fetch(fetchUrl)
+              .then(response => response.json())
+              .then(data => {
+                appendLog('JARVIS', data.speech);
+                speakText(data.speech);
+              })
+              .catch(error => {
+                const errSpeech = "Sir, the Sentinel uplink is experiencing interference. I cannot reach the database.";
+                appendLog('JARVIS', errSpeech);
+                speakText(errSpeech);
+              });
+            return;
+          }
 
                             // --- SCAM PROTOCOL OVERRIDE ---
           if (lower.includes('scam protocol')) {

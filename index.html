@@ -322,9 +322,8 @@ if (isTryingSecureCommand) {
             return;
           }
                   
-          // --- OMEGA SYSTEM OVERRIDE (SCRM ALERTS) ---
-          if (lower.includes('omega system') || lower.includes('omega alert') || lower.includes('omega network')) {
-            // PASTE YOUR NEW OMEGA APPS SCRIPT URL HERE
+                    // --- OMEGA SYSTEM OVERRIDE (SCRM ALERTS) ---
+          if (lower.includes('omega system') || lower.includes('omega alert') || lower.includes('omega network') || lower.includes('omega row') || lower.includes('omega raw') || lower.includes('omega roof') || lower.includes('omega pro')) {
             let omegaEndpointUrl = "https://script.google.com/macros/s/AKfycbwmSrMgZdzDZgTSTL05y5ZFfmuDBKBgvYzvZaq-Xi1n7JECipYroLxK7cG0ifs0G432/exec"; 
             
             let fetchUrl = "";
@@ -334,7 +333,7 @@ if (isTryingSecureCommand) {
               initSpeech = "Pulling the latest Omega SCRM alert, Boss.";
               fetchUrl = omegaEndpointUrl + "?mode=latest";
             } 
-                        else if (lower.includes('omega row') || lower.includes('omega raw') || lower.includes('omega roof') || lower.includes('omega pro')) {
+            else if (lower.includes('omega row') || lower.includes('omega raw') || lower.includes('omega roof') || lower.includes('omega pro')) {
               let triggerText = "omega row";
               if (lower.includes('omega raw')) triggerText = "omega raw";
               if (lower.includes('omega roof')) triggerText = "omega roof";

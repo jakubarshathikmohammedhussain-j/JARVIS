@@ -200,7 +200,7 @@ if (lower.includes('lock master control')) {
 }
 
 // Check if user is trying to access a locked protocol
-const secureCommands = ['portfolio', 'bleed protocol', 'market trend', 'corporate radar', 'scam protocol'];
+const secureCommands = ['portfolio', 'bleed protocol', 'market trend', 'corporate radar','omega', 'scam protocol'];
 const isTryingSecureCommand = secureCommands.some(cmd => lower.includes(cmd));
 
 if (isTryingSecureCommand) {
@@ -322,7 +322,64 @@ if (isTryingSecureCommand) {
             return;
           }
                   
+          // --- OMEGA SYSTEM OVERRIDE (SCRM ALERTS) ---
+          if (lower.includes('omega system') || lower.includes('omega alert') || lower.includes('omega network')) {
+            // PASTE YOUR NEW OMEGA APPS SCRIPT URL HERE
+            let omegaEndpointUrl = "https://script.google.com/macros/s/AKfycbwmSrMgZdzDZgTSTL05y5ZFfmuDBKBgvYzvZaq-Xi1n7JECipYroLxK7cG0ifs0G432/exec"; 
+            
+            let fetchUrl = "";
+            let initSpeech = "";
 
+            if (lower.includes('latest omega alert') || lower.includes('latest omega update')) {
+              initSpeech = "Pulling the latest Omega SCRM alert, Boss.";
+              fetchUrl = omegaEndpointUrl + "?mode=latest";
+            } 
+            else if (lower.includes('omega row') || lower.includes('omega raw') || lower.includes('omega roof')) {
+              let triggerText = "omega row";
+              if (lower.includes('omega raw')) triggerText = "omega raw";
+              if (lower.includes('omega roof')) triggerText = "omega roof";
+              
+              const rowParam = lower.split(triggerText)[1].trim();
+              initSpeech = "Extracting row " + rowParam + " from the Omega log...";
+              fetchUrl = omegaEndpointUrl + "?row=" + encodeURIComponent(rowParam);
+            }
+            else if (lower.includes('omega briefing for')) {
+              const dateParam = lower.split('omega briefing for')[1].trim();
+              initSpeech = "Compiling Omega risk briefing for " + dateParam + "...";
+              fetchUrl = omegaEndpointUrl + "?date=" + encodeURIComponent(dateParam);
+            } 
+            else if (lower.includes('omega alert for') || lower.includes('omega on')) {
+              let triggerPhrase = "omega alert for";
+              if (lower.includes('omega on')) triggerPhrase = "omega on";
+
+              const locParam = lower.split(triggerPhrase)[1].trim();
+              initSpeech = "Scanning Omega network for risks in " + locParam + "...";
+              fetchUrl = omegaEndpointUrl + "?location=" + encodeURIComponent(locParam);
+            } 
+            else {
+               initSpeech = "Omega network accessed. Please specify a location, a date, a row number, or ask for the latest alert.";
+               appendLog('JARVIS', initSpeech);
+               speakText(initSpeech);
+               return;
+            }
+
+            appendLog('JARVIS', initSpeech);
+            speakText(initSpeech);
+            
+            fetch(fetchUrl)
+              .then(response => response.json())
+              .then(data => {
+                appendLog('JARVIS', data.speech);
+                speakText(data.speech);
+              })
+              .catch(error => {
+                const errSpeech = "Sir, the Omega uplink is down. I cannot reach the SCRM database.";
+                appendLog('JARVIS', errSpeech);
+                speakText(errSpeech);
+              });
+            return;
+          }
+                  
                             // --- SCAM PROTOCOL OVERRIDE ---
           if (lower.includes('scam protocol')) {
             const speech = "Activating Scam Protocol now, Boss.";

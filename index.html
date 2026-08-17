@@ -334,10 +334,11 @@ if (isTryingSecureCommand) {
               initSpeech = "Pulling the latest Omega SCRM alert, Boss.";
               fetchUrl = omegaEndpointUrl + "?mode=latest";
             } 
-            else if (lower.includes('omega row') || lower.includes('omega raw') || lower.includes('omega roof')) {
+                        else if (lower.includes('omega row') || lower.includes('omega raw') || lower.includes('omega roof') || lower.includes('omega pro')) {
               let triggerText = "omega row";
               if (lower.includes('omega raw')) triggerText = "omega raw";
               if (lower.includes('omega roof')) triggerText = "omega roof";
+              if (lower.includes('omega pro')) triggerText = "omega pro";
               
               const rowParam = lower.split(triggerText)[1].trim();
               initSpeech = "Extracting row " + rowParam + " from the Omega log...";

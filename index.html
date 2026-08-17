@@ -268,12 +268,20 @@ if (isTryingSecureCommand) {
               initSpeech = "Pulling the latest Sentinel update, Boss.";
               fetchUrl = endpointUrl + "?mode=latest";
             } 
-            else if (lower.includes('corporate radar row') || lower.includes('corporate rader row')) {
-              const triggerText = lower.includes('corporate radar row') ? 'corporate radar row' : 'corporate rader row';
+            else if (lower.includes('corporate radar row') || lower.includes('corporate rader row') || lower.includes('corporate radar raw') || lower.includes('corporate rader raw') || lower.includes('corporate radar roof') || lower.includes('corporate rader roof')) {
+            
+              let triggerText = "corporate radar row";
+              if (lower.includes('corporate rader row')) triggerText = "corporate rader row";
+              if (lower.includes('corporate radar raw')) triggerText = "corporate radar raw";
+              if (lower.includes('corporate rader raw')) triggerText = "corporate rader raw";
+              if (lower.includes('corporate radar roof')) triggerText = "corporate radar roof";
+              if (lower.includes('corporate rader roof')) triggerText = "corporate rader roof";
+              
               const rowParam = lower.split(triggerText)[1].trim();
               initSpeech = "Extracting row " + rowParam + " from the Sentinel matrix...";
               fetchUrl = endpointUrl + "?row=" + encodeURIComponent(rowParam);
             }
+
             else if (lower.includes('corporate radar briefing for') || lower.includes('corporate rader briefing for')) {
               const triggerText = lower.includes('corporate radar briefing for') ? 'corporate radar briefing for' : 'corporate rader briefing for';
               const dateParam = lower.split(triggerText)[1].trim();

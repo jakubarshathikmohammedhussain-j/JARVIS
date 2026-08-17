@@ -258,7 +258,7 @@ if (isTryingSecureCommand) {
           }
 
 
-                                                           // --- CORPORATE RADAR OVERRIDE (SENTINEL NODE FRONTEND) ---
+                                                  // --- CORPORATE RADAR OVERRIDE (SENTINEL NODE FRONTEND) ---
           if (lower.includes('corporate radar') || lower.includes('corporate rader')) {
             let endpointUrl = "https://script.google.com/macros/s/AKfycbwVR18Arp720b9nQjiBeMwEx28Oo0DhHbXIXy5ikAWgScwqbMlc7QWRSARr6i4JIChGpQ/exec";
             let fetchUrl = "";
@@ -268,6 +268,12 @@ if (isTryingSecureCommand) {
               initSpeech = "Pulling the latest Sentinel update, Boss.";
               fetchUrl = endpointUrl + "?mode=latest";
             } 
+            else if (lower.includes('corporate radar row') || lower.includes('corporate rader row')) {
+              const triggerText = lower.includes('corporate radar row') ? 'corporate radar row' : 'corporate rader row';
+              const rowParam = lower.split(triggerText)[1].trim();
+              initSpeech = "Extracting row " + rowParam + " from the Sentinel matrix...";
+              fetchUrl = endpointUrl + "?row=" + encodeURIComponent(rowParam);
+            }
             else if (lower.includes('corporate radar briefing for') || lower.includes('corporate rader briefing for')) {
               const triggerText = lower.includes('corporate radar briefing for') ? 'corporate radar briefing for' : 'corporate rader briefing for';
               const dateParam = lower.split(triggerText)[1].trim();
@@ -285,7 +291,7 @@ if (isTryingSecureCommand) {
               fetchUrl = endpointUrl + "?company=" + encodeURIComponent(companyParam);
             } 
             else {
-               initSpeech = "Sentinel network accessed. Please specify a target company, a date, or ask for the latest update.";
+               initSpeech = "Sentinel network accessed. Please specify a target company, a date, a row number, or ask for the latest update.";
                appendLog('JARVIS', initSpeech);
                speakText(initSpeech);
                return;

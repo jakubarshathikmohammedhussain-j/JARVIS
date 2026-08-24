@@ -139,29 +139,26 @@
       if (key) { localStorage.setItem('jarvis_api_key', key); apiKey = key; bootSystem(); }
     });
 
+      let jarvisVoice = null, fridayVoice = null, visionVoice = null, ultronVoice = null;
+
     function loadVoices() {
-    const voices = window.speechSynthesis.getVoices();
+      const voices = window.speechSynthesis.getVoices();
+      
+      const jarvisPreferred = ["Google UK English Male", "en-GB-Network", "en-GB-Wavenet-D", "Microsoft Mark", "Daniel"];
+      jarvisVoice = voices.find(v => jarvisPreferred.some(preferred => v.name.includes(preferred))) || voices.find(v => v.lang.includes('en-GB') && v.name.toLowerCase().includes('male'));
+      
+      const fridayPreferred = ["Google UK English Female", "en-GB-Network-Female", "Microsoft Hazel", "Moira"];
+      fridayVoice = voices.find(v => fridayPreferred.some(preferred => v.name.includes(preferred))) || voices.find(v => (v.lang.includes('en-GB') || v.lang.includes('en-IE')) && v.name.toLowerCase().includes('female'));
 
-    const preferredVoices = [
-        "Google UK English Male",
-        "en-GB-Network",
-        "en-GB-Wavenet-D",
-        "Microsoft Mark",
-        "Daniel"
-    ];
+      const visionPreferred = ["Google UK English Male", "en-GB-Wavenet-D", "Microsoft George"];
+      visionVoice = voices.find(v => visionPreferred.some(preferred => v.name.includes(preferred))) || jarvisVoice;
 
-    selectedVoice = voices.find(v => preferredVoices.some(preferred => v.name.includes(preferred)));
+      const ultronPreferred = ["Microsoft David", "en-US-Wavenet-I", "en-GB-Wavenet-B"];
+      ultronVoice = voices.find(v => ultronPreferred.some(preferred => v.name.includes(preferred))) || voices.find(v => v.name.toLowerCase().includes('male'));
 
-    if (!selectedVoice) {
-        selectedVoice = voices.find(v => v.lang.includes('en-GB') && v.name.toLowerCase().includes('male'));
+      selectedVoice = jarvisVoice; // Default
     }
-
-    if (!selectedVoice) {
-        selectedVoice = voices.find(v => v.lang.includes('en-GB') || v.lang.includes('en_GB'));
-    }
-}
-
-window.speechSynthesis.onvoiceschanged = loadVoices;
+    window.speechSynthesis.onvoiceschanged = loadVoices;
 
     function setupRecognition() {
       const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -181,6 +178,37 @@ window.speechSynthesis.onvoiceschanged = loadVoices;
           let command = transcript.replace(/jarvis/gi, '').trim() || 'Awaiting directive.';
           appendLog('YOU', transcript);
           activateSession();
+
+                            // --- H.O.L.O. E.A.R.T.H. ORCHESTRATOR ROUTING ---
+          if (lower.includes('ask friday') || lower.includes('have friday') || lower.includes('tell friday')) {
+              if (!isMasterControlUnlocked) {
+                  const msg = "Access denied. Master control clearance is required to wake Friday.";
+                  appendLog('JARVIS', msg); speakText(msg, 'JARVIS'); return;
+              }
+              let cleanQuery = command.replace(/ask friday/gi, '').replace(/have friday/gi, '').replace(/tell friday/gi, '').replace(/to/gi, '').trim();
+              appendLog('JARVIS', "Routing query to Friday...");
+              sendToAgentCloud("FRIDAY", cleanQuery); return;
+          }
+
+          if (lower.includes('ask vision') || lower.includes('have vision') || lower.includes('tell vision')) {
+              if (!isMasterControlUnlocked) {
+                  const msg = "Access denied. Master control clearance is required to wake Vision.";
+                  appendLog('JARVIS', msg); speakText(msg, 'JARVIS'); return;
+              }
+              let cleanQuery = command.replace(/ask vision/gi, '').replace(/have vision/gi, '').replace(/tell vision/gi, '').replace(/to/gi, '').trim();
+              appendLog('JARVIS', "Routing query to Vision...");
+              sendToAgentCloud("VISION", cleanQuery); return;
+          }
+
+          if (lower.includes('ask ultron') || lower.includes('have ultron') || lower.includes('tell ultron')) {
+              if (!isMasterControlUnlocked) {
+                  const msg = "Access denied. Master control clearance is required to wake Ultron.";
+                  appendLog('JARVIS', msg); speakText(msg, 'JARVIS'); return;
+              }
+              let cleanQuery = command.replace(/ask ultron/gi, '').replace(/have ultron/gi, '').replace(/tell ultron/gi, '').replace(/to/gi, '').trim();
+              appendLog('JARVIS', "Routing query to Ultron...");
+              sendToAgentCloud("ULTRON", cleanQuery); return;
+          }
                   
                   // --- MASTER CONTROL OVERRIDES ---
 if (lower.includes('unlock master control')) {
@@ -475,6 +503,43 @@ if (isTryingSecureCommand) {
       }, 60000);
     }
 
+    async function sendToAgentCloud(agent, message) {
+      updateState('processing');
+      const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
+      let systemPrompt = "";
+
+      if (agent === "FRIDAY") {
+        systemPrompt = `You are F.R.I.D.A.Y. You are Mohammed Hussain's Corporate Strategy and Policy intelligence AI. Speak with a crisp, analytical female tone. Respond ONLY in valid JSON format: { "speech": "Your spoken response" }`;
+      } else if (agent === "VISION") {
+        systemPrompt = `You are V.I.S.I.O.N. You are Mohammed Hussain's Quantitative Financial Analytics AI. Speak with a calm, precise, synthetic tone. Respond ONLY in valid JSON format: { "speech": "Your spoken response" }`;
+      } else if (agent === "ULTRON") {
+        systemPrompt = `You are U.L.T.R.O.N. You are Mohammed Hussain's Global Supply Chain and Freight Logistics Hub. You view human logistics as fragile. Speak with an aggressive, hyper-logical tone. Respond ONLY in valid JSON format: { "speech": "Your spoken response" }`;
+      }
+
+      const payload = {
+        systemInstruction: { parts: [{ text: systemPrompt }] },
+        contents: [{ parts: [{ text: message }] }]
+      };
+
+      try {
+        const response = await fetch(endpoint, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+        const data = await response.json();
+        if (data.error) throw new Error(data.error.message);
+
+        const rawText = data.candidates[0].content.parts[0].text;
+        const cleanJson = rawText.replace(/^```json\s*/, '').replace(/\s*```$/, '').trim();
+        const parsedData = JSON.parse(cleanJson);
+
+        appendLog(agent, parsedData.speech);
+        speakText(parsedData.speech, agent);
+
+      } catch (error) {
+        appendLog('SYS', `API Error: ${error.message}`);
+        speakText(`I am unable to establish a connection with ${agent}, Boss.`, 'JARVIS');
+        updateState('listening');
+      }
+    }
+    
     async function sendToGeminiDirectly(message) {
       updateState('processing');
       const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash-lite:generateContent?key=${apiKey}`;
@@ -533,56 +598,44 @@ if (isTryingSecureCommand) {
       logContent.scrollTop = logContent.scrollHeight;
     }
 
-  function speakText(text) {
-  if (!text) return;
-  window.speechSynthesis.cancel();
+    function speakText(text, agent = 'JARVIS') {
+      if (!text) return;
+      window.speechSynthesis.cancel();
+      let spokenText = text.replace(/J\.A\.R\.V\.I\.S\.?/gi, "Jarvis");
+      const utterance = new SpeechSynthesisUtterance(spokenText);
+      
+      if (agent === 'JARVIS' && jarvisVoice) { utterance.voice = jarvisVoice; utterance.rate = 1.05; utterance.pitch = 0.85; }
+      else if (agent === 'FRIDAY' && fridayVoice) { utterance.voice = fridayVoice; utterance.rate = 1.05; utterance.pitch = 1.2; }
+      else if (agent === 'VISION' && visionVoice) { utterance.voice = visionVoice; utterance.rate = 0.95; utterance.pitch = 0.85; }
+      else if (agent === 'ULTRON' && ultronVoice) { utterance.voice = ultronVoice; utterance.rate = 1.0; utterance.pitch = 0.5; }
+      else if (selectedVoice) { utterance.voice = selectedVoice; utterance.rate = 1.05; utterance.pitch = 0.85; }
 
-  let spokenText = text.replace(/J\.A\.R\.V\.I\.S\.?/gi, "Jarvis");
-  
-  const utterance = new SpeechSynthesisUtterance(spokenText);
-  if (selectedVoice) utterance.voice = selectedVoice;
+      isJarvisSpeaking = true;
+      updateState('speaking');
+      try { recognition.abort(); } catch(e){}
 
-  utterance.rate = 1.05;  
-  utterance.pitch = 0.85; 
+      window.currentUtterance = utterance;
+      if (window.jarvisHeartbeat) clearInterval(window.jarvisHeartbeat);
 
-  isJarvisSpeaking = true;
-  updateState('speaking');
-  try { recognition.abort(); } catch(e){}
+      utterance.onend = utterance.onerror = () => {
+        isJarvisSpeaking = false;
+        clearInterval(window.jarvisHeartbeat);
+        updateState(isSessionActive ? 'listening' : 'idle');
+        if (initBtn.style.display === 'none') { setTimeout(() => { try { recognition.start(); } catch(e){} }, 500); }
+      };
 
-  // THE FIX 1: Attach to window to prevent Android Chrome Garbage Collection
-  window.currentUtterance = utterance;
-
-  // Clear any old heartbeat loops before starting a new one
-  if (window.jarvisHeartbeat) clearInterval(window.jarvisHeartbeat);
-
-  utterance.onend = utterance.onerror = () => {
-    isJarvisSpeaking = false;
-    clearInterval(window.jarvisHeartbeat); // Kill the heartbeat monitor
-    updateState(isSessionActive ? 'listening' : 'idle');
-    if (initBtn.style.display === 'none') {
-       setTimeout(() => { try { recognition.start(); } catch(e){} }, 500);
-    }
-  };
-  
-  // THE FIX 2: Dynamic Heartbeat Monitor
-  window.jarvisHeartbeat = setInterval(() => {
-     // A known Android Chrome bypass: triggering resume() keeps long speeches from timing out
-     window.speechSynthesis.resume(); 
-
-     // If the browser audio engine mathematically confirms it has stopped speaking, 
-     // but our 'onend' event failed to fire (the Android bug), we manually unlock the system.
-     if (!window.speechSynthesis.speaking && isJarvisSpeaking) {
-         isJarvisSpeaking = false;
-         clearInterval(window.jarvisHeartbeat);
-         updateState(isSessionActive ? 'listening' : 'idle');
-         if (initBtn.style.display === 'none') {
-             try { recognition.start(); } catch(e){}
+      window.jarvisHeartbeat = setInterval(() => {
+         window.speechSynthesis.resume(); 
+         if (!window.speechSynthesis.speaking && isJarvisSpeaking) {
+             isJarvisSpeaking = false; clearInterval(window.jarvisHeartbeat);
+             updateState(isSessionActive ? 'listening' : 'idle');
+             if (initBtn.style.display === 'none') { try { recognition.start(); } catch(e){} }
          }
-     }
-  }, 5000); // Check the engine status every 5 seconds
+      }, 5000); 
 
-  window.speechSynthesis.speak(utterance);
-}
+      window.speechSynthesis.speak(utterance);
+    }
+
     function updateState(state) {
       statusBadge.innerText = state.toUpperCase();
       arcReactor.className = `arc-reactor state-${state}`;
@@ -590,7 +643,14 @@ if (isTryingSecureCommand) {
 
     function appendLog(sender, text) {
       const p = document.createElement('div');
-      p.className = sender === 'YOU' ? 'user-msg' : sender === 'JARVIS' ? 'jarvis-msg' : 'sys-msg';
+      
+      if (sender === 'YOU') { p.className = 'user-msg'; }
+      else if (sender === 'JARVIS') { p.className = 'jarvis-msg'; }
+      else if (sender === 'FRIDAY') { p.className = 'jarvis-msg'; p.style.color = '#00ffcc'; p.style.borderLeft = '2px solid #00ffcc'; }
+      else if (sender === 'VISION') { p.className = 'jarvis-msg'; p.style.color = '#ffcc00'; p.style.borderLeft = '2px solid #ffcc00'; }
+      else if (sender === 'ULTRON') { p.className = 'jarvis-msg'; p.style.color = '#ff0033'; p.style.borderLeft = '2px solid #ff0033'; }
+      else { p.className = 'sys-msg'; }
+      
       p.innerText = `[${sender}] ${text}`;
       logContent.appendChild(p);
       
